@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, SafeAreaView, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-
 import wateringImg from '../assets/watering.png';
 import colors from '../styles/colors';
+import { Feather } from '@expo/vector-icons';
 
 export function Welcome() {
 
@@ -12,9 +12,9 @@ export function Welcome() {
                 Gerencie {'\n'} suas plantas {'\n'} de forma fácil
             </Text>
 
-            <Image 
-                style={styles.image} 
-                source={wateringImg} 
+            <Image
+                style={styles.image}
+                source={wateringImg}
                 resizeMode='contain'
             />
 
@@ -27,9 +27,10 @@ export function Welcome() {
                 style={styles.button}
                 activeOpacity={0.7}
             >
-                <Text style={styles.buttonText}>
-                    {'>'}
-                </Text>
+                <Feather 
+                    name='chevron-right' 
+                    style={styles.buttonIcon}
+                />
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -66,8 +67,8 @@ const styles = StyleSheet.create({
         height: 56,
         width: 56
     },
-    buttonText: {
-        fontSize: 24,
+    buttonIcon: {
+        fontSize: 32,
         color: colors.white
     }
 });
