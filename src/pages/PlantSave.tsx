@@ -9,7 +9,7 @@ import fonts from '../styles/fonts';
 import { useRoute } from '@react-navigation/core';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { isBefore, format } from 'date-fns';
-import { PlantProps } from '../libs/storage';
+import { PlantProps, savePlant, loadPlant } from '../libs/storage';
 
 interface Params {
     plant: PlantProps
@@ -36,6 +36,17 @@ export function PlantSave() {
 
     function handleDateTimePickerForAndroid() {
         setShowDatePicker(oldSate => !oldSate);
+    }
+
+    async function handleSave() {
+        try {
+            await savePlant({
+                ...plant,
+                dateTimeNotification: selectedDateTime
+            });
+        } catch {
+            Alert.alert('Não foi possível salvar! 😥');
+        }
     }
 
     return (
@@ -82,7 +93,7 @@ export function PlantSave() {
 
                 {
                     Platform.OS === 'android' && (
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleDateTimePickerForAndroid}
                             style={styles.dateTimePickerButton}
                         >
@@ -95,7 +106,7 @@ export function PlantSave() {
 
                 <Button
                     title='Cadastrar planta'
-                    onPress={() => { }}
+                    onPress={handleSave}
                 />
             </View>
         </View>
