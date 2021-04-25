@@ -17,14 +17,14 @@ export interface PlantProps {
 
 interface StoragePlantProps {
     [id: string]: {
-        data: PlantProps
+        data: PlantProps;
     }
 }
 
 export async function savePlant(plant: PlantProps): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@plantmanager:plants');
-        const oldPlant = data ? (JSON.parse(data) as StoragePlantProps) : {};
+        const oldPlants = data ? (JSON.parse(data) as StoragePlantProps) : {};
         const newPlant = {
             [plant.id]: {
                 data: plant
@@ -34,7 +34,7 @@ export async function savePlant(plant: PlantProps): Promise<void> {
         await AsyncStorage.setItem('@plantmanager:plants',
             JSON.stringify({
                 ...newPlant,
-                ...oldPlant
+                ...oldPlants
             })
         );
 
