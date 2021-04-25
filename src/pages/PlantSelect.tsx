@@ -9,6 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import api from '../services/api';
 import { PlantCardPrimary } from '../components/PlantCardPrimary';
 import { Load } from '../components/Load';
+import { useNavigation } from '@react-navigation/native';
 
 interface EnvironmentProps {
     key: string;
@@ -37,6 +38,8 @@ export function PlantSelect() {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [loadingMore, setLoadingMore] = useState(false);
+
+    const navigation = useNavigation();
 
     async function fetchPlants() {
         const { data } = await api.get(`plants?_sort=name&_order=asc&_page=${page}&_limit=8`);
@@ -77,6 +80,10 @@ export function PlantSelect() {
         setLoadingMore(true);
         setPage(oldValue => oldValue + 1);
         fetchPlants();
+    }
+
+    function handlePlantSelect(plant: PlantProps) {
+        navigation.navigate('PlantSave', { plant });
     }
 
     useEffect(() => {
@@ -128,17 +135,20 @@ export function PlantSelect() {
                 <FlatList
                     data={filteredPlants}
                     renderItem={({ item }) => (
-                        <PlantCardPrimary data={item} />
+                        <PlantCardPrimary
+                            data={item}
+                            onPress={() => handlePlantSelect(item)}
+                        />
                     )}
                     keyExtractor={(item) => String(item.id)}
                     showsVerticalScrollIndicator={false}
                     numColumns={2}
                     onEndReachedThreshold={0.1}
-                    onEndReached={({distanceFromEnd}) => handleFetchMore(distanceFromEnd)}
+                    onEndReached={({ distanceFromEnd }) => handleFetchMore(distanceFromEnd)}
                     ListFooterComponent={
                         loadingMore ?
-                        <ActivityIndicator color={colors.green} />
-                        : <></>
+                            <ActivityIndicator color={colors.green} />
+                            : <></>
                     }
                 />
             </View>
